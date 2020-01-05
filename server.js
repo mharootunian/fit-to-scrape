@@ -21,33 +21,29 @@ const server = app.listen(PORT, () => {
 
 app.get("/scrape", function(req, res) {
 
-    axios.get("http://rss.cnn.com/rss/cnn_topstories.rss").then(function(response) {
+    axios.get("https://text.npr.org/").then(function(response) {
 
-        const $ = cheerio.load(response.data);
+        let $ = cheerio.load(response.data);
+console.log(response.data);
+        // yoink every list item with class=regularitem
+        $("li").each(function(i, element) {
 
-        // // yoink every list item with class=regularitem
-        // $("regularitem li").each(function(i, element) {
-        //
-        //     let article = {};
-        //
-        //     // article.title = $(this).children("itemtitle h4").children("a").text();
-        //     // article.link = $(this).children("itemtitle h4").children("a").attr("href");
-        //     // article.link = "asd";
-        //     article.title = "asd";
-        //     article.link = "asd";
-        //     article.summary = "asd";
-        //
-        //     // Create a new Article using the `result` object built from scraping
-        //     db.Article.create(article)
-        //         .then(function(dbArticle) {
-        //             console.log(dbArticle);
-        //             console.log("article added");
-        //         })
-        //         .catch(function(err) {
-        //             console.log(err);
-        //         });
-        // });
+            let article = {};
 
+            article.title = $(this).children("a").text();
+            article.link = "https://text.npr.org" + $(this).children("a").attr("href");
+            article.summary = "asd";
+
+            // Create a new Article using the `result` object built from scraping
+            db.Article.create(article)
+                .then(function(dbArticle) {
+                    console.log(dbArticle);
+                    console.log("article added");
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
+        });
 
         // Send a message to the client
         res.send("Scrape Complete");
