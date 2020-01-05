@@ -4,20 +4,28 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const mongoose = require("mongoose");
 const db = require("./models");
-
+const exphbs  = require('express-handlebars');
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-//mongoose.connect('mongodb://localhost/fit-to-scrape', {useNewUrlParser: true});
+//register handlebars as view engine
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
 mongoose.connect('mongodb://localhost/fit-to-scrape', {useNewUrlParser: true}, function(err) {
     if (err) throw err;
 });
+
 const server = app.listen(PORT, () => {
     console.log("Server started.")
-})
+});
+
+app.get("/", function(req, res) {
+
+});
 
 app.get("/scrape", function(req, res) {
 
