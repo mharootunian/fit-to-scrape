@@ -3,6 +3,14 @@ const app = express();
 const cheerio = require("cheerio");
 const axios = require("axios");
 const mongoose = require("mongoose");
+const db = require("./models");
+
+app.use(logger("dev"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
+
+// mongoose.connect("", { useNewUrlParser: true });
 
 app.get("/scrape", function(req, res) {
 
